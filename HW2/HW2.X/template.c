@@ -1,6 +1,5 @@
 #include "nu32dip.h" // constants, functions for startup and UART
-#include<stdio.h>
-#include <string.h>
+#include <stdio.h>
 
 void blink(int, int); // blink the LEDs function
 
