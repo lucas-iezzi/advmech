@@ -64,7 +64,7 @@
         <makeUseCleanTarget>false</makeUseCleanTarget>
         <makeCustomizationPreStep></makeCustomizationPreStep>
         <makeCustomizationPostStepEnabled>true</makeCustomizationPostStepEnabled>
-        <makeCustomizationPostStep>C:\Users\Lucas\Documents\Documents\EDI\Adv Mechatronics\advmech\HW2\nu32utility.exe COM3 ${ImagePath}</makeCustomizationPostStep>
+        <makeCustomizationPostStep>"C:\Users\Lucas\Documents\Documents\EDI\Adv Mechatronics\advmech\HW2\nu32utility.exe" "COM3" ${ImagePath}</makeCustomizationPostStep>
         <makeCustomizationPutChecksumInUserID>false</makeCustomizationPutChecksumInUserID>
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>

@@ -1,0 +1,42 @@
+%rename link  old_link
+
+*legacy_libc_deprecated:
+%{mlegacy-libc|mno-legacy-libc|legacy-libc|no-legacy-libc:%n[no]legacy-libc is deprecated and has no effect (will be removed in future releases)}
+
+*newlib_libc_deprecated:
+%{mnewlib-libc|mno-newlib-libc|newlib-libc|no-newlib-libc:%n[no]newlib-libc is deprecated and has no effect (will be removed in future releases)}
+
+*mrelaxed_deprecated:
+%{mrelaxed-math:%nmrelaxed-math is deprecated and has no effect (will be removed in future releases)}
+
+*fpic_deprecated:
+%{fPIC|fpic:%efPIC is deprecated (will be removed in future releases)}
+
+*fpie_deprecated:
+%{fPIE|fpie:%efPIE is deprecated (will be removed in future releases)}
+
+*musl_libc:
+%(legacy_libc_deprecated) %(newlib_libc_deprecated) %(fpic_deprecated) %(fpie_deprecated) -lc-musl
+
+*musl_libm:
+-lm-musl
+
+*libm:
+%(mrelaxed_deprecated) %{mfp64 : %(musl_libm) ; :-lm -le %(musl_libm)}
+
+*libdebug:
+%{!mno-mpdebug-lib:-ldebug}
+
+*libmchp_peripheral:
+%{mperipheral-libs:-lmchp_peripheral %{mprocessor=*:-lmchp_peripheral_%*}}
+
+*libdsp:
+%{mdspr2*: -ldspr2 -ldsp} %{mprocessor=32MX*: -ldsp} %{mprocessor=32MM*: -ldsp}
+
+*lib:
+--start-group \
+  -lpic32 %(libdebug) %(libmchp_peripheral) %(musl_libc) %(libm) %(libdsp) %G \
+--end-group
+
+*link:
+%(old_link) %:remove-outfile(-lm)

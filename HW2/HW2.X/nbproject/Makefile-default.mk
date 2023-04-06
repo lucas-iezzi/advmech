@@ -100,8 +100,8 @@ ifneq ($(INFORMATION_MESSAGE), )
 endif
 	${MAKE}  -f nbproject/Makefile-default.mk ${DISTDIR}/HW2.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
 	@echo "--------------------------------------"
-	@echo "User defined post-build step: [C:\Users\Lucas\Documents\Documents\EDI\Adv Mechatronics\advmech\HW2\nu32utility.exe COM3 ${ImagePath}]"
-	@C:\Users\Lucas\Documents\Documents\EDI\Adv Mechatronics\advmech\HW2\nu32utility.exe COM3 ${ImagePath}
+	@echo "User defined post-build step: ["C:\Users\Lucas\Documents\Documents\EDI\Adv Mechatronics\advmech\HW2\nu32utility.exe" "COM3" ${ImagePath}]"
+	@"C:\Users\Lucas\Documents\Documents\EDI\Adv Mechatronics\advmech\HW2\nu32utility.exe" "COM3" ${ImagePath}
 	@echo "--------------------------------------"
 
 MP_PROCESSOR_OPTION=32MX170F256B

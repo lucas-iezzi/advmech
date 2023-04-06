@@ -1,17 +1,29 @@
 #include "nu32dip.h" // constants, functions for startup and UART
+#include<stdio.h>
+#include <string.h>
 
 void blink(int, int); // blink the LEDs function
 
 int main(void) {
-  char message[100];
+  char blink_msg[100];
+  char dur_msg[100];
+  int blinks;
+  int duration;
   
   NU32DIP_Startup(); // cache on, interrupts on, LED/button init, UART init
   while (1) {
-    NU32DIP_ReadUART1(message, 100); // wait here until get message from computer
-    NU32DIP_WriteUART1(message); // send message back
+    NU32DIP_WriteUART1("Type in number of blinks: ");
+    NU32DIP_ReadUART1(blink_msg, 100);
+    NU32DIP_WriteUART1(blink_msg);
+    NU32DIP_WriteUART1("\r\n");
+    NU32DIP_WriteUART1("Type in time between blink (ms): ");
+    NU32DIP_ReadUART1(dur_msg, 100); // wait here until get message from computer
+    NU32DIP_WriteUART1(dur_msg);
     NU32DIP_WriteUART1("\r\n"); // carriage return and newline
+    blinks = atoi(blink_msg);
+    duration = atoi(dur_msg);
 	if (NU32DIP_USER){
-		blink(5, 500); // 5 times, 500ms each time
+		blink(blinks, duration); // 5 times, 500ms each time
 	}
   }
 }

@@ -3,9 +3,9 @@
   <executable name="dist/default/production/HW2.X.production.elf">                 
     <memory name="program">                 
       <units>bytes</units>                 
-      <length>263312</length>                 
-      <used>2752</used>                     
-      <free>260560</free>                     
+      <length>237568</length>                 
+      <used>2672</used>                     
+      <free>234896</free>                     
     </memory>                              
     <memory name="data">              
       <units>bytes</units>                 
