@@ -1,1 +1,1 @@
-[HW3 Video](https://youtube.com/shorts/EkYNpLRZgso)
+![HW5 Image](https://github.com/lucas-iezzi/advmech/blob/main/HW5/HW5.jpg)
