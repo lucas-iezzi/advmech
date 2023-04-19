@@ -441,7 +441,7 @@
       "idf": "",
       "netlist": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "STEP/HW4-1.step",
       "vrml": ""
     },
     "page_layout_descr_file": ""
