@@ -38,7 +38,6 @@ int main() {
 	LATAbits.LATA0 = 1;
 	
     //calculate triangle value to send
-    //float posb = t / 200;
     unsigned int vb = 1023/200 * t; // get triangle value from 0 to 1023
     unsigned short db = vb & 0b1111111111; //convert value to bits
     unsigned char cb = 1; //0 for a, 1 for b

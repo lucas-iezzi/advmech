@@ -78,11 +78,31 @@ LDLIBSOPTIONS=
 # fixDeps replaces a bunch of sed/cat/printf statements that slow down the build
 FIXDEPS=fixDeps
 
+# The following macros may be used in the pre and post step lines
+_/_=\\
+ShExtension=.bat
+Device=PIC32MX170F256B
+ProjectDir="C:\Users\Lucas\Documents\Documents\EDI\Adv Mechatronics\advmech\HW6\HW6.X"
+ProjectName=HW6
+ConfName=default
+ImagePath="dist\default\${IMAGE_TYPE}\HW6.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}"
+ImageDir="dist\default\${IMAGE_TYPE}"
+ImageName="HW6.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}"
+ifeq ($(TYPE_IMAGE), DEBUG_RUN)
+IsDebug="true"
+else
+IsDebug="false"
+endif
+
 .build-conf:  ${BUILD_SUBPROJECTS}
 ifneq ($(INFORMATION_MESSAGE), )
 	@echo $(INFORMATION_MESSAGE)
 endif
 	${MAKE}  -f nbproject/Makefile-default.mk ${DISTDIR}/HW6.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+	@echo "--------------------------------------"
+	@echo "User defined post-build step: ["C:\Users\Lucas\Documents\Documents\EDI\Adv Mechatronics\advmech\HW6\nu32utility.exe" "COM3" ${ImagePath}]"
+	@"C:\Users\Lucas\Documents\Documents\EDI\Adv Mechatronics\advmech\HW6\nu32utility.exe" "COM3" ${ImagePath}
+	@echo "--------------------------------------"
 
 MP_PROCESSOR_OPTION=32MX170F256B
 MP_LINKER_FILE_OPTION=,--script="NU32DIPbootloaded.ld"
