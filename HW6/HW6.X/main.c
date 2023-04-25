@@ -13,7 +13,7 @@ int main(){
     unsigned char address = 0b0100000; //0100(A2,A1,A0)
     
 	// init the chip --> set the IODIR register for GP0 in, GP7 out
-    setPin(address, IODIRreg, 0b01111111); //(IO7,IO6,IO5,IO4,IO3,IO2,IO1,IO0)
+    sendI2C(address, IODIRreg, 0b01111111); //(IO7,IO6,IO5,IO4,IO3,IO2,IO1,IO0)
     
     unsigned int lastBeat = _CP0_GET_COUNT();
     unsigned int LEDon  = 0;
@@ -38,7 +38,7 @@ int main(){
 	}
 }
 
-void setPin(unsigned char address, unsigned char reg, unsigned char value){ 
+void sendI2C(unsigned char address, unsigned char reg, unsigned char value){ 
     //address = 0b0100(A2,A1,A0,RW);
     //reg = 0x0A //for OLAT
     //value = 0b(GP7,GP6,GP5,GP4,GP3,GP2,GP1,GP0)
@@ -49,7 +49,7 @@ void setPin(unsigned char address, unsigned char reg, unsigned char value){
     i2c_master_send(value); //send value to change register to
     i2c_master_stop(); //send stop bit
 }
-unsigned char readPin(unsigned char address, unsigned char reg){ 
+unsigned char readI2C(unsigned char address, unsigned char reg){ 
     //address = 0b0100(A2,A1,A0);
     //reg = 0x0A //for OLAT
     unsigned char addressW = address << 1;
