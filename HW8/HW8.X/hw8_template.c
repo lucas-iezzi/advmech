@@ -9,69 +9,63 @@ void blink(int, int); // blink the LEDs function
 
 int main(void) {
     NU32DIP_Startup(); // cache on, interrupts on, LED/button init, UART init
-//    init_mpu6050();
-    i2c_master_setup();
+    init_mpu6050();
     ssd1306_setup(); 
 	
 	unsigned char data[100]; // char array for the raw data
-	float xXL, yXL, zXL, xG, yG, zG, temp; // floats to store the data
+	float zXL; // floats to store the data
     char str[100]; // string for printing
+    unsigned int lastBeat = _CP0_GET_COUNT();
+    unsigned int loopStart = _CP0_GET_COUNT();
+    unsigned int LEDon  = 0;
+    float delay;
     
 	ssd1306_clear();//clear screen
-//	uint8_t whoAmI = whoami();// read whoami
-//    NU32DIP_WriteUART1(sprintf(str,"%#x\r\n",whoAmI));// print whoami
-//    while (whoAmI != 0x68){	// if whoami is not 0x68, stuck in loop with LEDs on
-//        NU32DIP_GREEN = 1;
-//        NU32DIP_YELLOW = 1;
-//    }
-//    NU32DIP_GREEN = 0;
-//    NU32DIP_YELLOW = 0;
     
-//	// wait to print until you get a newline
-//    NU32DIP_ReadUART1(str,100);
+	uint8_t whoAmI = whoami();// read whoami
+    sprintf(str,"%#x\r\n",whoAmI);
+    NU32DIP_WriteUART1(str);// print whoami
+    while (whoAmI != 0x68){	// if whoami is not 0x68, stuck in loop with LEDs on
+        NU32DIP_GREEN = 1;
+        NU32DIP_YELLOW = 1;
+    }
+    NU32DIP_GREEN = 0;
+    NU32DIP_YELLOW = 0;
+    
+    _CP0_SET_COUNT(0);
 
     while (1) {
+        loopStart = _CP0_GET_COUNT();
+        
 		// use core timer for exactly 100Hz loop
-        _CP0_SET_COUNT(0);
-        blink(1, 5);
+        if ((_CP0_GET_COUNT() - lastBeat) > ((48000000 / 2)*0.25)){
+            lastBeat = _CP0_GET_COUNT();
+            if (LEDon==0){
+                NU32DIP_YELLOW = 1;
+                NU32DIP_GREEN = 0;
+                LEDon = 1;
+            }
+            else{
+                NU32DIP_YELLOW = 0;
+                NU32DIP_GREEN = 1;
+                LEDon = 0;
+            }
+        }
 
-//        // read IMU
-//        burst_read_mpu6050(data);
-//		
-//        // convert data
-//        xXL = conv_xXL(get_xXL(data)); // convert x-acceleration to float (g's)
-//        yXL = conv_yXL(get_yXL(data)); // convert y-acceleration to float (g's)
-//        zXL = conv_zXL(get_zXL(data)); // convert z-acceleration to float (g's)
-//        temp = conv_temp(get_temp(data)); // convert temperature to float (Celsius)
-//        xG = conv_xG(get_xG(data)); // convert x-gyro rate to float (dps)
-//        yG = conv_yG(get_yG(data)); // convert y-gyro rate to float (dps)
-//        zG = conv_zG(get_zG(data)); // convert z-gyro rate to float (dps)
-//        
-//        // print out the data
-//        sprintf(str, "X Acceleration=%f\r\n", xXL);
-//        NU32DIP_WriteUART1(str);
-//        sprintf(str, "Y Acceleration=%f\r\n", yXL);
-//        NU32DIP_WriteUART1(str);
-//        sprintf(str, "Z Acceleration=%f\r\n", zXL);
-//        NU32DIP_WriteUART1(str);
-//        sprintf(str, "X Gyroscope=%f\r\n", xG);
-//        NU32DIP_WriteUART1(str);
-//        sprintf(str, "Y Gyroscope=%f\r\n", yG);
-//        NU32DIP_WriteUART1(str);
-//        sprintf(str, "X Gyroscope=%f\r\n", zG);
-//        NU32DIP_WriteUART1(str);
-//        sprintf(str, "Temperature=%f\r\n", temp);
-//        NU32DIP_WriteUART1(str);
+        // read IMU
+        burst_read_mpu6050(data);
+        
+        zXL = conv_zXL(data); // convert z-acceleration to float (g's)
         
         //print data to screen
-        char m[100];
-        sprintf(m,"hello");
-        drawString(m,0,10);
-        drawChar(m[0],0,0);
+        sprintf(str, "Z Accel = %f", zXL);
+        drawString(str,0,0);
         ssd1306_update();
         
-        while (_CP0_GET_COUNT() < 48000000 / 2 / 100) {//wait for loop timer to finish
-        }
+        delay = (_CP0_GET_COUNT() - loopStart);
+        sprintf(str, "%f FPS", (48000000/2)/delay);
+        drawString(str,0,20);
+        ssd1306_update();
     }
 }
 
@@ -90,27 +84,5 @@ void drawString(char * m, unsigned char x, unsigned char y){
     while(m[k]!='\0'){
         drawChar(m[k],x+5*k,y);
         k++;
-    }
-}
-
-// blink the LEDs
-void blink(int iterations, int time_ms) {
-    int i;
-    unsigned int t;
-    for (i = 0; i < iterations; i++) {
-        NU32DIP_GREEN = 0; // on
-        NU32DIP_YELLOW = 1; // off
-        t = _CP0_GET_COUNT(); // should really check for overflow here
-        // the core timer ticks at half the SYSCLK, so 24000000 times per second
-        // so each millisecond is 24000 ticks
-        // wait half in each delay
-        while (_CP0_GET_COUNT() < t + 12000 * time_ms) {
-        }
-
-        NU32DIP_GREEN = 1; // off
-        NU32DIP_YELLOW = 0; // on
-        t = _CP0_GET_COUNT(); // should really check for overflow here
-        while (_CP0_GET_COUNT() < t + 12000 * time_ms) {
-        }
     }
 }
