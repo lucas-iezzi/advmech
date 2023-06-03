@@ -6,6 +6,10 @@ This video shows it calibrating then adjusting the heading from -1 to 1 and back
 The drive motors are controlled using a PIC32 with and IMU for feedback.
 The Pico uses a camera to detect a line on the ground and eventually it will send a heading to the drive board over UART based on where the line is.
 
+![HW15 Image](https://github.com/lucas-iezzi/advmech/blob/main/Final/Pictures/IMG-1599.jpg)
+See Final/Pictures for more pictures
+
+
 __Chips Used__
 * PIC32MX170F256B (PIC32)
 * AP7381 (3.3V Regualtor)
